@@ -2,6 +2,7 @@ from converters.rest_request_converter import convert_rest_request
 from converters.datasource_converter import convert_datasource_step
 from converters.properties_converter import convert_properties_step
 from converters.property_transfer_converter import convert_property_transfer_step
+from converters.groovy_script_converter import convert_groovy_script, create_script_step
 from analyzer.groovy_behavior_classifier import GroovyBehaviorClassifier
 from typing import Dict, List, Any, Optional, Union
 import json
@@ -442,31 +443,31 @@ pm.test('GLF class initialized', function() {
         }
     }
 
-def dispatch_step_conversion(test_step, context: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def dispatch_step_conversion(test_step) -> Optional[Dict[str, Any]]:
     """
-    Dispatch a test step to the appropriate converter based on its type
+    Dispatch test step conversion based on step type
     """
     try:
-        # Add the step_type if not present
-        step_type = ""
-        if hasattr(test_step, 'step_type'):
-            step_type = test_step.step_type
+        step_type = test_step.type.lower()
         
-        # Try to determine the step type from the name or config
-        name = getattr(test_step, 'name', '').lower()
-        
-        # Special case handling for known step types
-        if name == 'setupscriptlibrary':
-            return create_script_step("SetupScriptLibrary", "prerequest")
-        elif name == 'functionlibrary':
-            return create_library_step("FunctionLibrary")
-        elif name in ['insetup', 'runtest', 'setup', 'teardown']:
-            return create_script_step(test_step.name, "prerequest")
-        
-        # Default handling if no specialized dispatcher is found
-        logger.warning(f"Unsupported step type: {step_type}, skipping.")
-        return None
-        
+        if step_type == "restrequest":
+            return convert_rest_request(test_step)
+        elif step_type == "datasource":
+            return convert_datasource_step(test_step)
+        elif step_type == "properties":
+            return convert_properties_step(test_step)
+        elif step_type == "propertytransfer":
+            return convert_property_transfer_step(test_step)
+        elif step_type == "groovyscript":
+            # Get script type from step name or default to prerequest
+            script_type = "prerequest"
+            if "test" in test_step.name.lower():
+                script_type = "test"
+            return create_script_step(test_step.name, script_type, test_step.script)
+        else:
+            logger.warning(f"Unsupported step type: {step_type}")
+            return None
+            
     except Exception as e:
-        logger.error(f"Error dispatching step '{getattr(test_step, 'name', '')}': {str(e)}")
+        logger.error(f"Failed to convert step {test_step.name}: {str(e)}")
         return None

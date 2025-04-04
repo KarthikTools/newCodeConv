@@ -1,7 +1,7 @@
 import logging
 import xml.etree.ElementTree as ET
-from urllib.parse import urlparse, urljoin
-from typing import Dict, Any
+from urllib.parse import urlparse, parse_qs, urljoin
+from typing import Dict, Any, List
 
 logger = logging.getLogger(__name__)
 
@@ -9,8 +9,35 @@ def get_endpoint_full_path(resource_name: str) -> str:
     """
     Get the full endpoint path for a resource
     """
-    # Use environment variables instead of hardcoded paths
     return "{{path}}/" + resource_name if resource_name else "{{path}}"
+
+def extract_headers(config: ET.Element, namespaces: Dict[str, str]) -> List[Dict[str, str]]:
+    """
+    Extract headers from the REST request configuration
+    """
+    headers = []
+    for header in config.findall('.//con:header', namespaces) or config.findall('.//ns2:header', namespaces):
+        name = header.get('name', '')
+        value = header.get('value', '')
+        if name and value:
+            headers.append({
+                "key": name,
+                "value": value
+            })
+    return headers
+
+def extract_assertions(config: ET.Element, namespaces: Dict[str, str]) -> List[str]:
+    """
+    Extract assertions from the REST request configuration
+    """
+    assertions = []
+    for assertion in config.findall('.//con:assertion', namespaces) or config.findall('.//ns2:assertion', namespaces):
+        if assertion.get('type') == 'Valid HTTP Status Codes':
+            codes = assertion.get('ValidStatusCodes', '200')
+            assertions.append(f"pm.test('Status code is {codes}', function() {{")
+            assertions.append(f"    pm.response.to.have.status({codes});")
+            assertions.append("});")
+    return assertions
 
 def convert_rest_request(test_step) -> Dict[str, Any]:
     """
@@ -37,101 +64,78 @@ def convert_rest_request(test_step) -> Dict[str, Any]:
             logger.warning(f"Could not find REST request in test step: {test_step.name}")
             return None
 
-        # Get method and endpoint
-        method = request.get('method', 'GET')
+        # Get resource path and method name
+        resource_path = request.get('resourcePath', '')
+        method_name = request.get('methodName', '')
+        http_method = "POST"  # default fallback
+
+        # Try to resolve method and parameter styles from the interface section
+        matched_query_params = []
+        matched_headers = []
+        
+        # Find the interface section
+        interface_section = config.find(".//con:interface", namespaces)
+        if interface_section is not None:
+            for resource in interface_section.findall("con:resource", namespaces):
+                if resource.get("path") == resource_path:
+                    for method in resource.findall("con:method", namespaces):
+                        if method.get("name") == method_name:
+                            http_method = method.get("method", "POST")
+                            method_parameters = method.find("con:parameters", namespaces)
+                            if method_parameters is not None:
+                                for param in method_parameters.findall("con:parameter", namespaces):
+                                    param_name = param.get("name")
+                                    param_style = param.get("style", "QUERY").upper()
+                                    param_value = ""
+                                    for entry in request.findall('con:parameters/con:entry', namespaces):
+                                        if entry.get('key') == param_name:
+                                            param_value = entry.get('value', '')
+                                            break
+                                    if param_name and param_value:
+                                        if param_style == "HEADER":
+                                            matched_headers.append({"key": param_name, "value": param_value})
+                                        else:
+                                            matched_query_params.append({"key": param_name, "value": param_value})
+
+        # Get endpoint and original URI
         endpoint = request.findtext('.//con:endpoint', '', namespaces) or request.findtext('.//ns2:endpoint', '', namespaces)
+        original_uri = request.findtext('.//con:originalUri', '', namespaces) or request.findtext('.//ns2:originalUri', '', namespaces)
         
-        # Get full path from the step name to match manual format
-        resource_path = get_endpoint_full_path(test_step.name)
+        # Parse the URL
+        url_to_parse = original_uri or endpoint
+        parsed_url = urlparse(url_to_parse) if url_to_parse else urlparse('{{baseUrl}}')
         
-        # If we don't have a path from the name mapping, try to get it from XML
-        if not resource_path:
-            try:
-                resource_element = request.find('..', namespaces)
-                if resource_element is not None:
-                    path_attr = resource_element.get('path')
-                    if path_attr:
-                        resource_path = path_attr
-            except Exception:
-                logger.debug(f"Error finding resource path for {test_step.name}")
-        
-        # Combine endpoint and path to form the full URL
-        full_url = endpoint
-        if resource_path:
-            # Make sure path starts with a slash
-            if not resource_path.startswith('/'):
-                resource_path = '/' + resource_path
-            # Combine endpoint and path
-            full_url = urljoin(endpoint, resource_path)
-        
-        # Parse endpoint into components - handle empty or invalid URLs gracefully
-        parsed_url = urlparse(full_url) if full_url else urlparse('{{baseUrl}}')
+        # Extract URL components
         protocol = parsed_url.scheme or 'https'
+        host = parsed_url.netloc.split('.') if parsed_url.netloc else []
+        path = [p for p in parsed_url.path.split('/') if p]
         
-        # Split host into parts, handling empty values
-        host = []
-        if parsed_url.netloc:
-            host = parsed_url.netloc.split('.')
-        
-        # Split path into parts, handling empty values
-        path = []
-        if parsed_url.path:
-            path = [p for p in parsed_url.path.split('/') if p]
-        
-        # Handle query parameters if present
-        query = []
+        # Parse query parameters from URL
+        query_params = []
         if parsed_url.query:
-            query_parts = parsed_url.query.split('&')
-            for param in query_parts:
-                if '=' in param:
-                    key, value = param.split('=', 1)
-                    query.append({"key": key, "value": value})
-                else:
-                    query.append({"key": param, "value": ""})
+            query_dict = parse_qs(parsed_url.query)
+            for key, values in query_dict.items():
+                for value in values:
+                    query_params.append({"key": key, "value": value})
         
-        # Get headers and determine content type
-        headers = []
-        content_type = 'application/json'  # Default content type
+        # Combine URL query params with interface params
+        all_query_params = query_params + matched_query_params
         
-        # Standard headers matching manual format
-        standard_headers = [
-            {"key": "Cookie", "value": "{{JSESSIONID}}"},
-            {"key": "Content-Type", "value": "application/json"}
-        ]
+        # Get headers
+        headers = extract_headers(config, namespaces)
+        headers.extend(matched_headers)
         
-        # Check if this is an XML request
+        # Determine content type
+        content_type = 'application/json'  # Default
         media_type = request.get('mediaType', '').lower()
         if media_type == 'application/xml' or 'xml' in media_type:
             content_type = 'application/xml'
-            standard_headers[1]["value"] = 'application/xml'
-            
-        # Try to find headers in request
-        for header in request.findall('.//con:header', namespaces) or request.findall('.//ns2:header', namespaces):
-            name = header.get('name', '')
-            value = header.get('value', '')
-            if name and value:
-                headers.append({
-                    "key": name,
-                    "value": value
-                })
         
-        # If no headers found in request, use standard headers
-        if not headers:
-            headers = standard_headers
-            
-        # Check for standard headers we should add
-        if test_step.name == "summary":
-            # The manual example shows these headers for summary
-            if not any(h.get("key") == "channel" for h in headers):
-                headers.append({"key": "channel", "value": "WEB"})
-            if not any(h.get("key") == "locale" for h in headers):
-                headers.append({"key": "locale", "value": "en"})
-            if not any(h.get("key") == "clientIdType" for h in headers):
-                headers.append({"key": "clientIdType", "value": "CLIENT_CARD_NUM"})
-            if not any(h.get("key") == "requestId" for h in headers):
-                headers.append({"key": "requestId", "value": "75e5f78f-18ce-498c-bb22-75c44833a188"})
-
-        # Get body
+        # Add content type header if not present
+        if not any(h.get("key", "").lower() == "content-type" for h in headers):
+            headers.append({"key": "Content-Type", "value": content_type})
+        
+        # Get request body
         body = None
         body_element = request.find('.//con:request', namespaces) or request.find('.//ns2:request', namespaces)
         
@@ -152,35 +156,20 @@ def convert_rest_request(test_step) -> Dict[str, Any]:
                     }
                 }
             }
-        else:
-            # If no body found, add an empty one like the manual example
-            language = "json"
-            if 'xml' in content_type.lower():
-                language = "xml"
-                
-            body = {
-                "mode": "raw",
-                "raw": "",
-                "options": {
-                    "raw": {
-                        "language": language
-                    }
-                }
-            }
 
         # Create request object
         request_obj = {
             "name": test_step.name,
             "request": {
-                "method": method,
+                "method": http_method,
                 "header": headers,
                 "url": {
-                    "raw": full_url,
+                    "raw": url_to_parse,
                     "protocol": protocol,
                     "host": host,
-                    "path": path
-                },
-                "description": "Converted from ReadyAPI REST request"
+                    "path": path,
+                    "query": all_query_params
+                }
             }
         }
         
@@ -188,25 +177,17 @@ def convert_rest_request(test_step) -> Dict[str, Any]:
         if body:
             request_obj["request"]["body"] = body
             
-        # Add empty response array to match manual format
+        # Add empty response array
         request_obj["response"] = []
 
-        # Get assertions and create test script
-        assertions = request.findall('.//con:assertion', namespaces) or request.findall('.//ns2:assertion', namespaces)
-        
+        # Add test script if there are assertions
+        assertions = extract_assertions(config, namespaces)
         if assertions:
-            exec_lines = [
-                "// Test script for " + test_step.name + " request",
-                "pm.test('Status code is 200', function() {",
-                "    pm.response.to.have.status(200);",
-                "});"
-            ]
-            
             request_obj["event"] = [{
                 "listen": "test",
                 "script": {
                     "type": "text/javascript",
-                    "exec": exec_lines
+                    "exec": assertions
                 }
             }]
 
