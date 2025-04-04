@@ -1,0 +1,51 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+.project
+.pydevproject
+*.sublime-*
+
+# macOS
+.DS_Store
+
+# Input and output files
+input_files/
+*.json
+*.xml
+!requirements.txt
+
+# Logs
+*.log
+log/
+logs/
+
+# Test output
+test_output.json
+test_environment.json
+final_test.json
+final_test_env.json
+converted_*.json
+
+# Local configuration
+.python-version
+*.local 

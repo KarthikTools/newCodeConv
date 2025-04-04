@@ -77,7 +77,7 @@ def run_readyapi_to_postman(xml_file_path: str, output_file: str, env_output_fil
         build_postman_environment(project.name + " Env", project.properties, env_output_file)
 
     logger.report()
-    print(f"\n✅ Conversion completed. Output saved to: {output_file}")
+    print(f"\n Conversion completed. Output saved to: {output_file}")
 
 
 # Example entry point

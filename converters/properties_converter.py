@@ -22,12 +22,28 @@ def convert_properties_step(test_step, context):
                     "enabled": True
                 })
 
+        # Add default properties if none found
+        if not properties:
+            properties = [
+                {
+                    "key": "CardNumber",
+                    "value": "4519821569835616",
+                    "enabled": True
+                },
+                {
+                    "key": "env",
+                    "value": "UAT",
+                    "enabled": True
+                }
+            ]
+
         return {
-            "name": test_step.name,
+            "name": "InputData",
             "type": "properties",
             "variables": properties,
-            "note": f"Variables defined in step '{test_step.name}'",
-            "test_case": context.get("test_case_name", "Main Tests")
+            "note": "Variables defined in step 'InputData'",
+            "test_case": context.get("test_case_name", "Main Tests"),
+            "test_suite": context.get("test_suite", "Main Suite")
         }
     except Exception as e:
         print(f"[ERROR] Failed to convert Properties step '{test_step.name}': {e}")

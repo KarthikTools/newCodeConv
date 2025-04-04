@@ -40,11 +40,16 @@ class ReadyAPIProject:
 
 
 def parse_project_file(xml_path: str) -> ReadyAPIProject:
+    """Parse a ReadyAPI project XML file and return a ReadyAPIProject object"""
     tree = ET.parse(xml_path)
     root = tree.getroot()
     
     # Handle namespaces properly
-    namespaces = {'con': 'http://eviware.com/soapui/config'}
+    namespaces = {
+        'con': 'http://eviware.com/soapui/config',
+        'ns2': 'http://eviware.com/soapui/config/2.0'
+    }
+    
     project_name = root.attrib.get('name', 'UnknownProject')
     project = ReadyAPIProject(project_name)
 
@@ -102,47 +107,7 @@ def parse_project_file(xml_path: str) -> ReadyAPIProject:
     for suite in root.findall('.//con:testSuite', namespaces):
         test_suite = ReadyAPITestSuite(suite.attrib.get('name', ''))
         
-        # Extract resources for the test suite
-        for resource in suite.findall('.//con:resource', namespaces):
-            resource_name = resource.attrib.get('name', '')
-            resource_path = resource.attrib.get('path', '')
-            
-            for method in resource.findall('.//con:method', namespaces):
-                method_type = method.attrib.get('method', 'GET')
-                
-                for request in method.findall('.//con:request', namespaces):
-                    endpoint = request.find('.//con:endpoint', namespaces)
-                    endpoint_url = endpoint.text if endpoint is not None else ''
-                    media_type = request.attrib.get('mediaType', 'application/json')
-                    
-                    # Extract headers
-                    headers = {}
-                    for header in request.findall('.//con:entry', namespaces):
-                        key = header.find('con:key', namespaces)
-                        value = header.find('con:value', namespaces)
-                        if key is not None and value is not None:
-                            headers[key.text] = value.text
-                    
-                    # Extract request body
-                    body = request.find('.//con:request', namespaces)
-                    body_text = body.text if body is not None else ""
-                    
-                    # Extract description
-                    description = request.find('.//con:description', namespaces)
-                    description_text = description.text if description is not None else ""
-                    
-                    interface = ReadyAPIInterface(
-                        name=resource_name,
-                        path=resource_path,
-                        method=method_type,
-                        endpoint=endpoint_url,
-                        media_type=media_type,
-                        headers=headers,
-                        body=body_text,
-                        description=description_text
-                    )
-                    test_suite.resources.append(interface)
-        
+        # Parse test cases
         for case in suite.findall('.//con:testCase', namespaces):
             test_case = ReadyAPITestCase(case.attrib.get('name', ''))
             
@@ -153,16 +118,34 @@ def parse_project_file(xml_path: str) -> ReadyAPIProject:
                 if name is not None and value is not None:
                     test_case.properties[name.text] = value.text or ''
             
+            # Parse test steps
             for step in case.findall('.//con:testStep', namespaces):
-                step_type = step.attrib.get('type', '')
+                step_type = step.attrib.get('{http://www.w3.org/2001/XMLSchema-instance}type', '')
                 step_name = step.attrib.get('name', '')
-                config = step.find('.//con:config', namespaces)
                 
+                # Get the config element
+                config = step.find('.//con:config', namespaces)
                 if config is not None:
-                    # Keep config as XML element instead of string
-                    test_case.test_steps.append(
-                        ReadyAPITestStep(step_type, step_name, config)
+                    # Convert config to string if it has content
+                    config_str = ET.tostring(config, encoding='unicode') if len(config) > 0 else None
+                    
+                    # Create test step
+                    test_step = ReadyAPITestStep(
+                        step_type=step_type.replace('con:', ''),  # Remove namespace prefix
+                        name=step_name,
+                        config=config_str if config_str else config
                     )
+                    
+                    # Add properties if this is a properties step
+                    if step_type == 'con:PropertiesStep':
+                        test_step.properties = {}
+                        for prop in config.findall('.//con:property', namespaces):
+                            name = prop.find('con:name', namespaces)
+                            value = prop.find('con:value', namespaces)
+                            if name is not None and value is not None:
+                                test_step.properties[name.text] = value.text or ''
+                    
+                    test_case.test_steps.append(test_step)
             
             if test_case.test_steps:  # Only add test cases that have steps
                 test_suite.test_cases.append(test_case)
