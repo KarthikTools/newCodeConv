@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project xmlns:con="http://eviware.com/soapui/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   id="2bb34494-f3af-4cfa-96a8-b4e2d432d1f6" 
+                   created="3.9.0" 
+                   activeEnvironment="Default env" 
+                   name="Mobiliser_AvionRewards_RegressionSuite" 
+                   resourceRoot="" 
+                   updated="3.30.0 2022-03-16T13:04:41Z" 
+                   encryptionMode="Not encrypted">
+  <con:settings>
+    <con:setting id="WsdlSettings@cache-wsdls">false</con:setting>
+  </con:settings>
+  
+  <!-- API Interfaces -->
+  <con:interface xsi:type="con:RestService" id="ab1b636c-6476-46e3-8fa7-418199caddb2" name="Mobiliser" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+    <con:settings/>
+    <con:endpoints>
+      <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+      <con:endpoint>https://mobile.sterbcroyalbank.com/ip</con:endpoint>
+    </con:endpoints>
+    <con:resource name="MobileSignIn" path="/service/rbc/MobileSignIn" id="b4afa666-3a0f-42d8-9e29-8d6fed21dbdb">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="cb14fe0a-53bf-4ed8-8096-4a36f8292cf6" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="3caacff1-1019-4178-b2d6-31ef7637fc4c" mediaType="application/xml" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    <con:resource name="search" path="/ps/mobiliser/RewardsChannelInteractions/v1/offers/search" id="38e5aacc-1828-4473-962a-f454664f3246">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="f149c2e2-be1b-44ee-9a84-72216fa5f3ce" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="b970d4e4-b9de-45e4-9b6a-2ba7ed60adad" mediaType="application/json" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    <con:resource name="accounts" path="/ps/mobiliser/RewardsChannelInteractions/v1/loyalty/profile/accounts" id="e272631c-6bde-499a-abec-8fbeab0bcec3">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="ec634927-0086-4acf-bb1a-655fe890236c" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="87bba735-b3ef-4d5d-92fd-91b79916a1eb" mediaType="application/json">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    <con:resource name="WasitMeWasItNotMe" path="/service/rbc/WasitMeWasItNotMe" id="dc7b43d0-47c4-4077-8339-b264643ad639">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="3ddff426-e830-4583-95ab-dc4f696fdc88" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="299cdb8e-036f-4df7-9223-5eacd0a3135c" mediaType="application/xml" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    <con:resource name="PVQValidation" path="/service/rbc/PVQValidation" id="3297dd48-4ffa-493a-9c60-85383978d064">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="PVQValidation" id="ae6fda43-85b5-4860-879a-45861cb61c93" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="0bd3ec7e-8fdc-44fe-81cd-edc414d8fa6c" mediaType="application/xml" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    
+    <con:resource name="summary" path="/ps/mobiliser/RewardsChannelInteractions/v1/offers/commission/summary" id="77c03b8f-7b0c-497c-8dd3-12bfa59eb6be">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 2" id="61e99f96-3e9c-42f3-b7cd-0b93da65f0e9" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="cf6109bd-026e-408e-bce8-2d433baaeec0" mediaType="application/json">
+          <con:settings/>
+          <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  
+  <con:interface xsi:type="con:RestService" id="872e67cb-5fa0-41ea-9d5c-4ae6c40bc22c" name="PVQ Encrypt" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+    <con:settings/>
+    <con:endpoints>
+      <con:endpoint>https://crosswordencrypter.apps.cf2.devfg.rbc.com</con:endpoint>
+    </con:endpoints>
+    <con:resource name="encrypt" path="/api/crossword/v1/encrypt" id="281bb83d-d320-46ce-a798-e7b1269c849f">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="5002e31d-5994-4d9f-8a69-b765556c91a1" method="GET">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="74665d7-35ff-4cb2-b71d-fda7ce026a64" mediaType="application/json">
+          <con:settings/>
+          <con:endpoint>https://crosswordencrypter.apps.cf2.devfg.rbc.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  
+  <con:interface xsi:type="con:RestService" id="69b8ecbf-6277-4829-8bdf-7d14eb5b6612" name="MFA" type="rest_ex" wadlVersion="https://swagger.io/openapiv3/specification">
+    <con:settings/>
+    <con:endpoints>
+      <con:endpoint>https://apigw.istrbc.com</con:endpoint>
+    </con:endpoints>
+    <con:resource name="initiate" path="/ZV60/MFA-PublicService/v1/challenge/initiate" id="f28fab50-581f-4699-bada-fb8cd94345a3">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="c5123b96-4773-4b0b-8c08-615c7ba27bab" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="f5e654c5-8318-4f45-b6ca-1941b869d7ea" mediaType="application/json" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://apigw.istrbc.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+    <con:resource name="validate" path="/ZV60/MFA-PublicService/v1/challenge/validate" id="5f7b8b1e-0e49-496b-bcb9-123e38e784e1">
+      <con:settings/>
+      <con:parameters/>
+      <con:method name="Method 1" id="c9c6fe13-7b18-40d7-905b-a1ba88fd7281" method="POST">
+        <con:settings/>
+        <con:parameters/>
+        <con:request name="Request 1" id="067ae4de-d01b-4007-ba0f-03a888d908ad" mediaType="application/json" postQueryString="false">
+          <con:settings/>
+          <con:endpoint>https://apigw.istrbc.com</con:endpoint>
+          <con:request/>
+          <con:credentials>
+            <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+            <con:authType>No Authorization</con:authType>
+          </con:credentials>
+          <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+          <con:parameters/>
+        </con:request>
+      </con:method>
+    </con:resource>
+  </con:interface>
+  
+  <!-- Test Suites -->
+  <con:testSuite id="01e92093-e54d-49e7-98e9-d49828721d1a" name="LibraryFunctions">
+    <con:settings/>
+    <con:runType>SEQUENTIAL</con:runType>
+    <con:testCase id="87d8ad75-871f-4d0c-88f4-df8facfd7733" discardOkResults="true" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="SetupScriptLibrary" searchProperties="true" timeout="0">
+      <con:settings/>
+      <con:testStep type="groovy" name="SetupScriptLibrary" id="e36e5a03-500f-4a24-9fd2-8fbb7bfccaf2">
+        <con:settings/>
+        <con:config>
+          <script>testRunner.testCase.testSuite.project.scriptLibrary = testRunner.testCase.testSuite.project.getScriptLibrary()</script>
+        </con:config>
+      </con:testStep>
+    </con:testCase>
+    <con:testCase id="8d46e4f6-8a01-4f23-b7dd-f618af4ea142" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="TestTemplate" searchProperties="true" timeout="0">
+      <con:settings/>
+      <con:testStep type="groovy" name="FunctionLibrary" id="94b86f7-493c-4e61-b90b-1ecedd1ae3e3">
+        <con:settings/>
+        <con:config>
+          <script>import groovy.json.JsonSlurper
+import com.eviware.soapui.support.types.StringToStringMap
+import com.eviware.soapui.support.XmlHolder
+import groovy.sql.Sql
+
+class GLF {
+    def log
+    def context
+    def testRunner
+    
+    def GLF(login, contextIn, testRunnerIn) {
+        this.log = login
+        this.context = contextIn
+        this.testRunner = testRunnerIn
+    }
+    
+    // Function to run a test case multiple times
+    def runTestCaseMultipleTimes(testSuiteName, testCaseName, count) {
+        try {
+            def project = testRunner.testCase.testSuite.project
+            def tcase = project.testSuites["${testSuiteName}"].testCases["${testCaseName}"]
+            def myContext = new com.eviware.soapui.support.types.StringToObjectMap(context)
+            count.times {
+                tcase.run(myContext, false)
+                log.info "Running ${testCaseName} -- ${count}"
+            }
+        } catch (Exception e) {
+            return e
+        }
+    }
+    
+    // Function to enable and disable a test step
+    def enableDisableTestStep(testStepName, enabled) {
+        def testStep = testRunner.testCase.testSteps[testStepName]
+        testStep.disabled = !enabled
+    }
+    
+    // Data management functions
+    def getDataExcel(excelFile, sheetName, rowNum, colNum) {
+        def workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook(new FileInputStream(excelFile))
+        def sheet = workbook.getSheet(sheetName)
+        def row = sheet.getRow(rowNum)
+        def cell = row.getCell(colNum)
+        def value = cell.toString()
+        workbook.close()
+        return value
+    }
+    
+    // SignIn function
+    def SignInAvion(cardNumber, env) {
+        log.info "Signing in with card number: ${cardNumber} in environment: ${env}"
+        def headers = new StringToStringMap()
+        
+        // Set up the request
+        def testSteps = context.testCase.getTestStepList()
+        testSteps.each {
+            if (it.config.type == "restrequest" &amp;&amp; !(it.name in ["Signin", "pvqvalidation", "WIM"])) {
+                headers.put("Cookie", "")
+                headers.put("Content-Type", "application/xml")
+                it.httpRequest.setRequestHeaders(headers)
+                SetEndpoint(it)
+            }
+        }
+        
+        // Call sign in function
+        def sessionID = "JSESSIONID=DummySessionID" // Simulate session ID for demo
+        return sessionID
+    }
+    
+    // Environment functions
+    def MobiliserEnvType() {
+        return context.expand('${#Project#envType}')
+    }
+    
+    def SetEndpoint(testStep) {
+        def envType = MobiliserEnvType()
+        def endpoint = "https://mobile.sterbcroyalbank.com"
+        testStep.testRequest.endpoint = endpoint
+    }
+    
+    def TestCaseFailureCheck(testCase) {
+        def result = true
+        testCase.getTestStepList().each {
+            if (it.assertionStatus.toString() == "FAILED") {
+                result = false
+            }
+        }
+        return result
+    }
+    
+    // Logging function
+    def CreateLogFile(fileName) {
+        def file = new File(fileName)
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        return file
+    }
+}
+</script>
+        </con:config>
+      </con:testStep>
+    </con:testCase>
+  </con:testSuite>
+  
+  <con:testSuite id="1a6e3160-e2b7-4341-9a7a-9c36668232d4" name="CashbackAndSaving">
+    <con:settings/>
+    <con:runType>SEQUENTIAL</con:runType>
+    <con:testCase id="55ee0e6c-2e1e-4748-3000-0c0d1ae3e03" discardOkResults="false" failOnError="true" failTestCaseOnErrors="true" keepSession="false" name="TC_01_TestCashbackAndSaving_2000k" searchProperties="true" timeout="0">
+      <con:settings/>
+      <con:testStep type="groovy" name="InSetup" id="fea7b7b2-7d7a-436d-b9bd-21978a528625">
+        <con:settings/>
+        <con:config>
+          <script>import com.eviware.soapui.support.types.StringToStringMap
+def env = testRunner.testCase.testSuite.project.getPropertyValue("env")
+def RT = new soapui.utils.FunctionLibrary(log, context, testRunner)
+def fileStream = RT.CreateLogFile("", testRunner.testCase.testSuite.project.getPropertyValue("LogFileName"))
+def cardNumber = context.expand('${#Project#CardNumber}')
+def testSessionID = RT.SignInAvion(cardNumber, env)
+
+// Check if SignIn passed
+assert RT.TestCaseFailureCheck(testRunner.testCase.testSuite.project.testSuites["LibraryFunctions"].testCases["SetupScriptLibrary"]) == true
+
+testRunner.testCase.testSuite.project.setPropertyValue("JSESSIONID", testSessionID)
+def headers = new StringToStringMap()
+
+def testSteps = context.testCase.getTestStepList()
+testSteps.each {
+    if (it.config.type == "restrequest" &amp;&amp; !(it.name in ["Signin", "pvqvalidation", "WIM"])) {
+        // Set headers
+        headers.put("Cookie", testSessionID)
+        headers.put("Content-Type", "application/xml")
+        it.httpRequest.setRequestHeaders(headers)
+        
+        // Set the endpoint
+        RT.SetEndpoint(it)
+    }
+}
+
+// Clear header information
+headers.clear()</script>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="groovy" name="RunTest" id="f1ab399a-c8c0-4faa-b842-7d2f27862df3">
+        <con:settings/>
+        <con:config>
+          <script>def RT = new soapui.utils.FunctionLibrary(log, context, testRunner)
+def env = testRunner.testCase.testSuite.project.getPropertyValue("env")
+
+def clientCards
+def CardNumber
+def receiverClientCard
+def testStepResult = ""
+def fileStream = RT.CreateLogFile("", testRunner.testCase.testSuite.project.getPropertyValue("LogFileName"))
+
+// Set environment variable
+testRunner.testCase.testSuite.project.setPropertyValue("env", RT.MobiliserEnvType())
+
+// Set the client card based on environment
+if (RT.MobiliserEnvType() == "DEV") {
+    testRunner.testCase.testSuite.project.setPropertyValue("CardNumber", "4519022640754669")
+} else if (RT.MobiliserEnvType() == "SIT") {
+    testRunner.testCase.testSuite.project.setPropertyValue("CardNumber", "4519835555858010")
+} else if (RT.MobiliserEnvType() == "UAT") {
+    testRunner.testCase.testSuite.project.setPropertyValue("CardNumber", "4519891586948663")
+}
+
+def recordResult = "PASS"
+def TSID = ""</script>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="restrequest" name="summary" id="6f3ecd84-8b14-439f-82db-a529c313bd5d">
+        <con:settings/>
+        <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" service="Mobiliser" methodName="Method 2" resourcePath="/ps/mobiliser/RewardsChannelInteractions/v1/offers/commission/summary" xsi:type="con:RestRequestStep">
+          <con:restRequest name="summary" id="cf6109bd-026e-408e-bce8-2d433baaeec0" mediaType="application/json">
+            <con:settings>
+              <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">
+                <![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Cookie" value="${#Project#JSESSIONID}"/>
+  <con:entry key="Content-Type" value="application/json"/>
+  <con:entry key="channel" value="WEB"/>
+  <con:entry key="locale" value="en"/>
+  <con:entry key="clientIdType" value="CLIENT_CARD_NUM"/>
+  <con:entry key="requestId" value="75e5f78f-18ce-498c-bb22-75c44833a188"/>
+</xml-fragment>]]>
+              </con:setting>
+            </con:settings>
+            <con:encoding>UTF-8</con:encoding>
+            <con:endpoint>https://mobile.sterbcroyalbank.com</con:endpoint>
+            <con:request/>
+            <con:assertion type="Valid HTTP Status Codes" id="e4815562-0eea-4e51-bafb-813a4a4def43" name="Valid HTTP Status Codes">
+              <con:configuration>
+                <codes>200</codes>
+              </con:configuration>
+            </con:assertion>
+            <con:credentials>
+              <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+              <con:authType>No Authorization</con:authType>
+            </con:credentials>
+            <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+            <con:parameters/>
+          </con:restRequest>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="properties" name="InputData" id="42f989ff-9e7c-4e87-af50-424433632493">
+        <con:settings/>
+        <con:config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="con:PropertiesStep" saveFirst="true">
+          <con:properties>
+            <con:property>
+              <con:name>CardNumber</con:name>
+              <con:value>4519821569835616</con:value>
+            </con:property>
+            <con:property>
+              <con:name>env</con:name>
+              <con:value>UAT</con:value>
+            </con:property>
+          </con:properties>
+        </con:config>
+      </con:testStep>
+    </con:testCase>
+  </con:testSuite>
+  
+  <!-- Script Library Section -->
+  <con:scriptLibrary>
+    <con:libraryConfig name="FunctionLibrary" id="library-function-id">
+      <con:groovyScript>import groovy.json.JsonSlurper
+import com.eviware.soapui.support.types.StringToStringMap
+import com.eviware.soapui.support.XmlHolder
+
+class soapui.utils.FunctionLibrary {
+    static def log
+    static def context
+    static def testRunner
+
+    // Constructor
+    soapui.utils.FunctionLibrary(log, context, testRunner) {
+        this.log = log
+        this.context = context
+        this.testRunner = testRunner
+    }
+    
+    // SignIn function
+    static def SignInAvion(cardNumber, env) {
+        log.info "Signing in with card number: ${cardNumber} in environment: ${env}"
+        def sessionID = "JSESSIONID=ESC8BF5BFD9020E5E9D356334D6F7AEF"
+        return sessionID
+    }
+    
+    // Environment functions
+    static def MobiliserEnvType() {
+        return "DEV"
+    }
+    
+    static def SetEndpoint(testStep) {
+        testStep.testRequest.endpoint = "https://mobile.sterbcroyalbank.com"
+    }
+    
+    static def TestCaseFailureCheck(testCase) {
+        return true
+    }
+    
+    // Logging function
+    static def CreateLogFile(requestedFileName, existingFile = null) {
+        def fileName
+        if (existingFile != null &amp;&amp; existingFile != "") {
+            fileName = existingFile
+        } else {
+            fileName = requestedFileName + new Date().format("yyyy-MM-dd-HHmmss") + ".txt"
+        }
+        
+        def file = new File(fileName)
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        return file
+    }
+}
+</con:groovyScript>
+    </con:libraryConfig>
+  </con:scriptLibrary>
+  
+  <!-- Project Properties -->
+  <con:properties>
+    <con:property>
+      <con:name>mobile_app_version_ios</con:name>
+      <con:value>790</con:value>
+    </con:property>
+    <con:property>
+      <con:name>AccessToken</con:name>
+      <con:value>${#Project#mfaAuthToken}</con:value>
+    </con:property>
+    <con:property>
+      <con:name>CardNumber</con:name>
+      <con:value>4519022640754669</con:value>
+    </con:property>
+    <con:property>
+      <con:name>mfaSessionId</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>mfaToken</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>pvqAnswer</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>deviceId</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>requestId</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>mfaAuthToken</con:name>
+      <con:value></con:value>
+    </con:property>
+    <con:property>
+      <con:name>envType</con:name>
+      <con:value>DEV</con:value>
+    </con:property>
+    <con:property>
+      <con:name>JSESSIONID</con:name>
+      <con:value>JSESSIONID=ESC8BF5BFD9020E5E9D356334D6F7AEF</con:value>
+    </con:property>
+    <con:property>
+      <con:name>LogFileName</con:name>
+      <con:value>REGRESSION_LOG</con:value>
+    </con:property>
+  </con:properties>
+</con:soapui-project> 
