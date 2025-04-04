@@ -71,7 +71,7 @@ def convert_groovy_to_javascript(groovy_script: str) -> str:
         # Convert endpoint setting
         if "SetEndpoint" in line or "endpoint" in line.lower():
             js_lines.append("// Set the endpoint")
-            js_lines.append("const endpoint = 'https://mobile.sterbcroyalbank.com';")
+            js_lines.append("const endpoint = pm.environment.get('baseUrl');")
             js_lines.append("console.log(`Setting endpoint to ${endpoint}`);")
             continue
             
@@ -107,7 +107,7 @@ pm.request.headers.add({key: 'Cookie', value: ''});
 pm.request.headers.add({key: 'Content-Type', value: 'application/xml'});
 
 // Set the endpoint
-const endpoint = 'https://mobile.sterbcroyalbank.com';
+const endpoint = pm.environment.get('baseUrl');
 console.log(`Setting endpoint to ${endpoint}`);"""
         else:  # Test script
             script_content = """// Test script converted from Groovy
@@ -143,7 +143,7 @@ pm.request.headers.add({key: 'Cookie', value: testSessionID});
 pm.request.headers.add({key: 'Content-Type', value: 'application/xml'});
 
 // Set the endpoint
-const endpoint = 'https://mobile.sterbcroyalbank.com';
+const endpoint = pm.environment.get('baseUrl');
 console.log(`Setting endpoint to ${endpoint}`);"""
 
         test_script = """// Test script converted from Groovy
@@ -386,7 +386,7 @@ class GLF {
     
     SetEndpoint(testStep) {
         const envType = this.MobiliserEnvType();
-        const endpoint = 'https://mobile.sterbcroyalbank.com';
+        const endpoint = pm.environment.get('baseUrl');
         // In Postman, we can't directly set the endpoint
         console.log(`Setting endpoint to ${endpoint}`);
     }

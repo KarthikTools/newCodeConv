@@ -5,23 +5,12 @@ from typing import Dict, Any
 
 logger = logging.getLogger(__name__)
 
-def get_endpoint_full_path(step_name: str) -> str:
+def get_endpoint_full_path(resource_name: str) -> str:
     """
-    Match the manual conversion by returning the correct full path for known endpoints
+    Get the full endpoint path for a resource
     """
-    endpoint_paths = {
-        "MobileSignIn": "/service/rbc/MobileSignIn",
-        "search": "/ps/mobiliser/RewardsChannelInteractions/v1/offers/search",
-        "accounts": "/ps/mobiliser/RewardsChannelInteractions/v1/loyalty/profile/accounts",
-        "WasitMeWasItNotMe": "/service/rbc/WasitMeWasItNotMe",
-        "PVQValidation": "/service/rbc/PVQValidation",
-        "summary": "/ps/mobiliser/RewardsChannelInteractions/v1/offers/commission/summary",
-        "encrypt": "/api/crossword/v1/encrypt",
-        "initiate": "/ZV60/MFA-PublicService/v1/challenge/initiate",
-        "validate": "/ZV60/MFA-PublicService/v1/challenge/validate"
-    }
-    
-    return endpoint_paths.get(step_name, "")
+    # Use environment variables instead of hardcoded paths
+    return "{{path}}/" + resource_name if resource_name else "{{path}}"
 
 def convert_rest_request(test_step) -> Dict[str, Any]:
     """
@@ -76,7 +65,7 @@ def convert_rest_request(test_step) -> Dict[str, Any]:
             full_url = urljoin(endpoint, resource_path)
         
         # Parse endpoint into components - handle empty or invalid URLs gracefully
-        parsed_url = urlparse(full_url) if full_url else urlparse('https://example.com')
+        parsed_url = urlparse(full_url) if full_url else urlparse('{{baseUrl}}')
         protocol = parsed_url.scheme or 'https'
         
         # Split host into parts, handling empty values

@@ -406,7 +406,7 @@ def run_readyapi_to_postman(input_file: str, output_file: str, env_file: str = N
             env_vars = [
                 {
                     "key": "baseUrl",
-                    "value": "https://api.example.com",
+                    "value": "{{baseUrl}}",
                     "type": "default",
                     "enabled": True
                 },
